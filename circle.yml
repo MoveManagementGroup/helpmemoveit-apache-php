@@ -1,0 +1,26 @@
+machine:
+  services:
+    - docker
+
+checkout:
+  post:
+    - git clone https://github.com/MoveManagementGroup/omnificent.git
+    - chmod u+x ./omnificent/AWS/ECS/deploy.sh
+
+dependencies:
+  pre:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+
+    - aws --version; sudo pip install --upgrade awscli; aws --version
+
+test:
+  pre:
+    - docker build --tag="mmginc/helpmemoveit-apache-php:latest" ./
+
+deployment:
+  production:
+    branch: [master]
+    commands:
+      - docker push mmginc/helpmemoveit-apache-php:latest
+
+      - ./omnificent/AWS/ECS/deploy.sh latest web-production-cluster us-west-2 helpmemoveit-legacy-production-service ./omnificent/AWS/ECS/task-definitions/helpmemoveit/helpmemoveit-legacy-production-task-definition.json helpmemoveit-legacy-production-task-definition helpmemoveit-legacy-production-task-definition
