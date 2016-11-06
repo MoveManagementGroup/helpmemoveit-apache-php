@@ -1,6 +1,6 @@
 # mmginc/helpmemoveit-apache-php
 
-FROM php:5.6-apache
+FROM php:5.6.27-apache
 
 MAINTAINER "Austin Maddox" <austin@maddoxbox.com>
 
