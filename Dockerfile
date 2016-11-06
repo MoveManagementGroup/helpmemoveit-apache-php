@@ -28,7 +28,9 @@ RUN a2enconf fqdn \
 
 # Define the virtual host.
 COPY ./etc/apache2/sites-available/virtual-host.conf /etc/apache2/sites-available/virtual-host.conf
-RUN a2ensite virtual-host
+RUN a2dissite 000-default \
+    && rm /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/default-ssl.conf \
+    && a2ensite virtual-host
 
 # If needed, add a custom php.ini configuration.
 COPY ./usr/local/etc/php/php.ini /usr/local/etc/php/php.ini
